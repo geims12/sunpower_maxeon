@@ -2,7 +2,7 @@
 
 **⚠️ Important: API Access Requirements**
 
-To use this integration, you **must first obtain API access credentials** from SunPower Maxeon. Please carefully follow the instructions in the official API documentation: [https://api.sunpower.maxeon.com/docs/](https://api.sunpower.maxeon.com/docs/)
+To use this integration, you **must first obtain API access credentials** from SunPower Maxeon. Please carefully follow the instructions in the official API documentation: [https://api.sunpowerglobal.com/docs/](https://api.sunpowerglobal.com/docs/)
 
 - Contact Maxeon at 📧 **api@maxeon.com** to request access.
 - If your application is approved, you’ll be asked to sign the API Terms of Use Agreement.

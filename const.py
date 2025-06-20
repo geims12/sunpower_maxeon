@@ -2,8 +2,8 @@
 from typing import Optional, Final
 DOMAIN = "sunpower_maxeon"
 
-OAUTH2_AUTHORIZE = "https://api.sunpower.maxeon.com/v1/authorize"
-OAUTH2_TOKEN = "https://api.sunpower.maxeon.com/v1/token"
+OAUTH2_AUTHORIZE = "https://api.sunpowerglobal.com/v1/authorize"
+OAUTH2_TOKEN = "https://api.sunpowerglobal.com/v1/token"
 
 SYSTEMS = {
     "systems": [

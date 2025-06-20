@@ -27,7 +27,7 @@ class AsyncConfigEntryAuth:
         """Fetch list of systems from the SunPower Maxeon API."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = "https://api.sunpower.maxeon.com/v1/systems"
+        url = "https://api.sunpowerglobal.com/v1/systems"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -48,7 +48,7 @@ class AsyncConfigEntryAuth:
         """Fetch system details for a specific system by serial number."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -69,7 +69,7 @@ class AsyncConfigEntryAuth:
         """Fetch system power data from the power meter endpoint."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/power_meter"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/power_meter"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -90,7 +90,7 @@ class AsyncConfigEntryAuth:
         """Fetch system energy data from the energy meter endpoint."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/energy_meter"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/energy_meter"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -115,7 +115,7 @@ class AsyncConfigEntryAuth:
         """Fetch the current UPS battery state (enabled/disabled)."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/battery_ups"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/battery_ups"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -141,7 +141,7 @@ class AsyncConfigEntryAuth:
             "Content-Type": "application/json"
         }
         payload = {"enable": enable}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/battery_ups"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/battery_ups"
 
         try:
             async with self._websession.put(url, headers=headers, json=payload) as resp:
@@ -158,7 +158,7 @@ class AsyncConfigEntryAuth:
         """Fetch the battery charging schedule for a specific system by serial number."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/charging_schedule"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/charging_schedule"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -182,7 +182,7 @@ class AsyncConfigEntryAuth:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json"
         }
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/charging_schedule"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/charging_schedule"
 
         try:
             async with self._websession.put(url, headers=headers, json=schedule) as resp:
@@ -199,7 +199,7 @@ class AsyncConfigEntryAuth:
         """Fetch the battery discharging schedule for a specific system by serial number."""
         token = await self.async_get_access_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/discharging_schedule"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/discharging_schedule"
 
         try:
             async with self._websession.get(url, headers=headers) as resp:
@@ -223,7 +223,7 @@ class AsyncConfigEntryAuth:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json"
         }
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/export_limit"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/export_limit"
         try:
             async with self._websession.get(url, headers=headers) as resp:
                 resp.raise_for_status()
@@ -246,7 +246,7 @@ class AsyncConfigEntryAuth:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json"
         }
-        url = f"https://api.sunpower.maxeon.com/v1/systems/{system_sn}/export_limit"
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/export_limit"
         payload = {"export_rate": export_rate}
         try:
             async with self._websession.put(url, headers=headers, json=payload) as resp:
