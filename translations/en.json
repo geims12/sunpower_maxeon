@@ -195,5 +195,49 @@
         }
       }
     }
+  },
+  "services": {
+    "remote_dispatch": {
+      "name": "Remote battery dispatch",
+      "description": "Send a one-off remote dispatch command that controls how the battery charges or discharges, e.g. to take advantage of a free-power window from your energy provider.",
+      "fields": {
+        "enable": {
+          "name": "Enable",
+          "description": "Turn the dispatch command on. Disable to cancel an in-progress dispatch."
+        },
+        "control_mode": {
+          "name": "Control mode",
+          "description": "How the battery should behave during the dispatch window:\n- **PV only charge**: battery charges only from solar PV.\n- **Forced charge / discharge**: forces charge or discharge at the given Power, stopping at Target state of charge.\n- **Load following**: battery output follows home consumption.\n- **Optimise consumption**: PV charges the battery first; grid tops up charging only if PV can't meet the target Power.\n- **Maximise consumption**: PV is bypassed, battery charges only from the grid.\n- **No battery charge**: charging is disabled for the dispatch window."
+        },
+        "duration_minutes": {
+          "name": "Duration (minutes)",
+          "description": "How long the dispatch command should run for."
+        },
+        "power": {
+          "name": "Power (W)",
+          "description": "Target charge/discharge power. Required by the API for PV only charge and Forced charge/discharge modes; ignored for the others."
+        },
+        "target_soc": {
+          "name": "Target state of charge (%)",
+          "description": "Battery SOC at which charging/discharging stops. Required by the API for Forced charge/discharge mode; ignored for the others."
+        },
+        "enable_pv": {
+          "name": "Allow PV",
+          "description": "Allow solar production to contribute during the dispatch window."
+        }
+      }
+    }
+  },
+  "selector": {
+    "remote_dispatch_control_mode": {
+      "options": {
+        "pv_only_charge": "PV only charge",
+        "forced_charge_discharge": "Forced charge / discharge",
+        "load_following": "Load following",
+        "optimise_consumption": "Optimise consumption",
+        "maximise_consumption": "Maximise consumption",
+        "no_battery_charge": "No battery charge"
+      }
+    }
   }
 }

@@ -185,9 +185,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         export = await api.async_get_export_limit(system_sn)
 
         if user_input is not None:
-            await api.async_set_export_limit(system_sn, {
-                "export_rate": user_input["export_rate"]
-            })
+            await api.async_set_export_limit(system_sn, int(user_input["export_rate"]))
             return self.async_create_entry(title="Export Limit", data={})
 
         return self.async_show_form(

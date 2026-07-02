@@ -216,6 +216,26 @@ class AsyncConfigEntryAuth:
             _LOGGER.error("Failed to fetch discharging schedule: %s", err)
             return DISCHARGING_SCHEDULE
     
+    async def async_set_discharging_schedule(self, system_sn: str, schedule: dict) -> None:
+        """Set the battery discharging schedule for a specific system by serial number."""
+        token = await self.async_get_access_token()
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+        }
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/discharging_schedule"
+
+        try:
+            async with self._websession.put(url, headers=headers, json=schedule) as resp:
+                resp.raise_for_status()
+        except ClientResponseError as err:
+            if err.status in (404, 400):
+                _LOGGER.warning(f"Cannot update discharging schedule for system {system_sn}: not found(HTTP {err.status})")
+            else:
+                raise
+        except Exception as err:
+            _LOGGER.error("Failed to update discharging schedule: %s", err)
+
     async def async_get_export_limit(self, system_sn: str) -> dict:
         """Fetch the current export limit for the system."""
         token = await self.async_get_access_token()
@@ -259,3 +279,18 @@ class AsyncConfigEntryAuth:
                 raise
         except Exception as err:
             _LOGGER.error("Failed to update export limit: %s", err)
+
+    async def async_set_remote_dispatching(self, system_sn: str, payload: dict) -> None:
+        """Send a remote dispatching command for a specific system by serial number."""
+        token = await self.async_get_access_token()
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+        }
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/remote_dispatching"
+
+        # Unlike the read endpoints (which fall back to dummy data), this is a
+        # control action: let failures propagate so the caller can surface them
+        # instead of silently reporting success.
+        async with self._websession.post(url, headers=headers, json=payload) as resp:
+            resp.raise_for_status()

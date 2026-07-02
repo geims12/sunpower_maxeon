@@ -93,6 +93,18 @@ EXPORT_LIMIT = {
   "export_rate": 80
 }
 
+SERVICE_REMOTE_DISPATCH = "remote_dispatch"
+
+# Maps friendly service field values to the API's numeric control_mode codes.
+REMOTE_DISPATCH_CONTROL_MODES = {
+    "pv_only_charge": 1,
+    "forced_charge_discharge": 2,
+    "load_following": 3,
+    "optimise_consumption": 6,
+    "maximise_consumption": 7,
+    "no_battery_charge": 19,
+}
+
 shared_data = {
     "system_sn": None,
     "system": {},

@@ -195,5 +195,49 @@
         }
       }
     }
+  },
+  "services": {
+    "remote_dispatch": {
+      "name": "Dispacciamento remoto della batteria",
+      "description": "Invia un comando di dispacciamento remoto una tantum per controllare come la batteria si carica o si scarica, ad esempio per sfruttare una finestra di energia gratuita offerta dal tuo fornitore.",
+      "fields": {
+        "enable": {
+          "name": "Abilita",
+          "description": "Attiva il comando di dispacciamento. Disattivalo per annullare un dispacciamento in corso."
+        },
+        "control_mode": {
+          "name": "Modalità di controllo",
+          "description": "Come deve comportarsi la batteria durante la finestra di dispacciamento:\n- **Carica solo da PV**: la batteria si carica solo con il solare.\n- **Carica / scarica forzata**: forza la carica o scarica alla Potenza indicata, fermandosi allo Stato di carica obiettivo.\n- **Inseguimento del carico**: l'uscita della batteria segue il consumo domestico.\n- **Ottimizza il consumo**: il PV carica prima la batteria; la rete integra la carica solo se il PV non raggiunge la Potenza indicata.\n- **Massimizza il consumo**: il PV viene escluso, la batteria si carica solo dalla rete.\n- **Nessuna carica della batteria**: la carica è disabilitata per la finestra di dispacciamento."
+        },
+        "duration_minutes": {
+          "name": "Durata (minuti)",
+          "description": "Per quanto tempo deve essere eseguito il comando di dispacciamento."
+        },
+        "power": {
+          "name": "Potenza (W)",
+          "description": "Potenza di carica/scarica desiderata. Richiesta dall'API per le modalità Carica solo da PV e Carica/scarica forzata; ignorata per le altre."
+        },
+        "target_soc": {
+          "name": "Stato di carica obiettivo (%)",
+          "description": "Livello di SOC al quale la carica/scarica si interrompe. Richiesto dall'API per la modalità Carica/scarica forzata; ignorato per le altre."
+        },
+        "enable_pv": {
+          "name": "Consenti PV",
+          "description": "Consenti alla produzione solare di contribuire durante la finestra di dispacciamento."
+        }
+      }
+    }
+  },
+  "selector": {
+    "remote_dispatch_control_mode": {
+      "options": {
+        "pv_only_charge": "Carica solo da PV",
+        "forced_charge_discharge": "Carica / scarica forzata",
+        "load_following": "Inseguimento del carico",
+        "optimise_consumption": "Ottimizza il consumo",
+        "maximise_consumption": "Massimizza il consumo",
+        "no_battery_charge": "Nessuna carica della batteria"
+      }
+    }
   }
 }

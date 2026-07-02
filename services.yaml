@@ -1,0 +1,54 @@
+remote_dispatch:
+  fields:
+    enable:
+      required: false
+      default: true
+      selector:
+        boolean:
+    control_mode:
+      required: true
+      selector:
+        select:
+          translation_key: remote_dispatch_control_mode
+          options:
+            - pv_only_charge
+            - forced_charge_discharge
+            - load_following
+            - optimise_consumption
+            - maximise_consumption
+            - no_battery_charge
+    duration_minutes:
+      required: false
+      default: 10
+      selector:
+        number:
+          min: 2
+          max: 1440
+          step: 1
+          unit_of_measurement: min
+          mode: box
+    power:
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 10000
+          step: 50
+          unit_of_measurement: W
+          mode: box
+    target_soc:
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+          mode: box
+    enable_pv:
+      required: false
+      default: false
+      selector:
+        boolean:
