@@ -204,9 +204,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         ups = await api.get_battery_ups_state(system_sn)
 
         if user_input is not None:
-            await api.set_battery_ups_state(system_sn, {
-                "enable": user_input["enable"]
-            })
+            await api.set_battery_ups_state(system_sn, user_input["enable"])
             return self.async_create_entry(title="UPS State", data={})
 
         return self.async_show_form(
