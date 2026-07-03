@@ -289,8 +289,20 @@ class AsyncConfigEntryAuth:
         }
         url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/remote_dispatching"
 
+        _LOGGER.info("Submitting remote dispatch for %s: %s", system_sn, payload)
+
         # Unlike the read endpoints (which fall back to dummy data), this is a
         # control action: let failures propagate so the caller can surface them
         # instead of silently reporting success.
         async with self._websession.post(url, headers=headers, json=payload) as resp:
+            body = await resp.text()
+            if resp.status >= 400:
+                _LOGGER.error(
+                    "Remote dispatch for %s rejected: HTTP %s - %s",
+                    system_sn, resp.status, body,
+                )
             resp.raise_for_status()
+            _LOGGER.info(
+                "Remote dispatch for %s accepted: HTTP %s - %s",
+                system_sn, resp.status, body,
+            )
