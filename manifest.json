@@ -1,7 +1,7 @@
 {
   "domain": "sunpower_maxeon",
   "name": "SunPower Maxeon",
-  "version": "2.2.0b2",
+  "version": "2.2.0b3",
   "documentation": "https://api.sunpowerglobal.com/docs/",
   "requirements": [
     "aiohttp>=3.7.0"

@@ -107,6 +107,7 @@ async def _async_handle_remote_dispatch(hass: HomeAssistant, call: ServiceCall) 
         )
 
     payload = {
+        "system_sn": system_sn,
         "enable": call.data["enable"],
         "control_mode": control_mode,
         "duration": int(call.data["duration_minutes"]) * 60,
