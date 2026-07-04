@@ -17,8 +17,10 @@ from homeassistant.helpers.selector import (
 )
 
 from .const import (
+    BATTERY_DISPATCH_CONTROL_MODES,
     DOMAIN,
     REMOTE_DISPATCH_CONTROL_MODES,
+    SERVICE_BATTERY_DISPATCH,
     SERVICE_REMOTE_DISPATCH,
     shared_data,
 )
@@ -47,6 +49,26 @@ SERVICE_REMOTE_DISPATCH_SCHEMA = vol.Schema({
         NumberSelectorConfig(min=0, max=10000, step=50, unit_of_measurement="W")
     ),
     vol.Optional("target_soc", default=0): NumberSelector(
+        NumberSelectorConfig(min=0, max=100, step=1, unit_of_measurement="%")
+    ),
+    vol.Optional("enable_pv", default=False): BooleanSelector(),
+})
+
+SERVICE_BATTERY_DISPATCH_SCHEMA = vol.Schema({
+    vol.Optional("enable", default=True): BooleanSelector(),
+    vol.Required("control_mode"): SelectSelector(
+        SelectSelectorConfig(
+            options=list(BATTERY_DISPATCH_CONTROL_MODES),
+            translation_key="battery_dispatch_control_mode",
+        )
+    ),
+    vol.Optional("duration_minutes", default=10): NumberSelector(
+        NumberSelectorConfig(min=2, max=1440, step=1, unit_of_measurement="min")
+    ),
+    vol.Required("power"): NumberSelector(
+        NumberSelectorConfig(min=0, max=10000, step=50, unit_of_measurement="W")
+    ),
+    vol.Required("target_soc"): NumberSelector(
         NumberSelectorConfig(min=0, max=100, step=1, unit_of_measurement="%")
     ),
     vol.Optional("enable_pv", default=False): BooleanSelector(),
@@ -103,6 +125,36 @@ async def _async_handle_remote_dispatch(hass: HomeAssistant, call: ServiceCall) 
     await entry_data["realtime"].async_request_refresh()
 
 
+async def _async_handle_battery_dispatch(hass: HomeAssistant, call: ServiceCall) -> None:
+    """Handle the battery_dispatch service call (simple force charge/discharge)."""
+    domain_data = hass.data.get(DOMAIN, {})
+    if not domain_data:
+        raise HomeAssistantError("No SunPower Maxeon integration is configured.")
+
+    entry_data = next(iter(domain_data.values()))
+    system_sn = entry_data["shared_data"].get("system_sn")
+    if not system_sn:
+        raise HomeAssistantError("No SunPower Maxeon system serial number available.")
+
+    payload = {
+        "enable": call.data["enable"],
+        "control_mode": BATTERY_DISPATCH_CONTROL_MODES[call.data["control_mode"]],
+        "duration": int(call.data["duration_minutes"]) * 60,
+        "power": int(call.data["power"]),
+        "target_soc": int(call.data["target_soc"]),
+        "enable_pv": call.data["enable_pv"],
+    }
+    try:
+        await entry_data["full"].api.async_set_battery_dispatching(system_sn, payload)
+    except Exception as err:
+        raise HomeAssistantError(
+            f"Failed to submit battery dispatch for system {system_sn}: {err}"
+        ) from err
+
+    # Refresh real-time power so the effect of the dispatch shows up promptly.
+    await entry_data["realtime"].async_request_refresh()
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up SunPower Maxeon from a config entry."""
     implementation = await config_entry_oauth2_flow.async_get_config_entry_implementation(hass, entry)
@@ -149,6 +201,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             schema=SERVICE_REMOTE_DISPATCH_SCHEMA,
         )
 
+    if not hass.services.has_service(DOMAIN, SERVICE_BATTERY_DISPATCH):
+        async def _handle_battery_dispatch(call: ServiceCall) -> None:
+            await _async_handle_battery_dispatch(hass, call)
+
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_BATTERY_DISPATCH,
+            _handle_battery_dispatch,
+            schema=SERVICE_BATTERY_DISPATCH_SCHEMA,
+        )
+
     await hass.config_entries.async_forward_entry_setups(entry, _PLATFORMS)
     return True
 
@@ -161,4 +224,5 @@ async def async_unload_entry(hass: HomeAssistant, entry: SunPowerConfigEntry) ->
         hass.data[DOMAIN].pop(entry.entry_id, None)
         if not hass.data[DOMAIN]:
             hass.services.async_remove(DOMAIN, SERVICE_REMOTE_DISPATCH)
+            hass.services.async_remove(DOMAIN, SERVICE_BATTERY_DISPATCH)
     return unload_ok

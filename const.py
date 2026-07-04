@@ -105,6 +105,15 @@ REMOTE_DISPATCH_CONTROL_MODES = {
     "no_battery_charge": 19,
 }
 
+SERVICE_BATTERY_DISPATCH = "battery_dispatch"
+
+# The battery_dispatching endpoint is a simpler force charge/discharge:
+# 0 = charge, 1 = discharge.
+BATTERY_DISPATCH_CONTROL_MODES = {
+    "charge": 0,
+    "discharge": 1,
+}
+
 shared_data = {
     "system_sn": None,
     "system": {},

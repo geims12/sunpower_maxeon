@@ -226,6 +226,36 @@
           "description": "Consenti alla produzione solare di contribuire durante la finestra di dispacciamento."
         }
       }
+    },
+    "battery_dispatch": {
+      "name": "Dispacciamento batteria (carica/scarica semplice)",
+      "description": "Forza la carica o la scarica della batteria per una durata prestabilita usando l'endpoint battery_dispatching più semplice. Prova questo se remote_dispatch viene accettato ma non ha effetto.",
+      "fields": {
+        "enable": {
+          "name": "Abilita",
+          "description": "Attiva il comando di dispacciamento. Disattivalo per annullare un dispacciamento in corso."
+        },
+        "control_mode": {
+          "name": "Direzione",
+          "description": "Se caricare la batteria (da rete/PV) o scaricarla."
+        },
+        "duration_minutes": {
+          "name": "Durata (minuti)",
+          "description": "Per quanto tempo deve essere eseguito il comando di dispacciamento."
+        },
+        "power": {
+          "name": "Potenza (W)",
+          "description": "Potenza di carica/scarica in watt."
+        },
+        "target_soc": {
+          "name": "Stato di carica obiettivo (%)",
+          "description": "Livello di SOC al quale la carica/scarica si interrompe."
+        },
+        "enable_pv": {
+          "name": "Consenti PV",
+          "description": "Consenti alla produzione solare di contribuire durante la finestra di dispacciamento."
+        }
+      }
     }
   },
   "selector": {
@@ -237,6 +267,12 @@
         "optimise_consumption": "Ottimizza il consumo",
         "maximise_consumption": "Massimizza il consumo",
         "no_battery_charge": "Nessuna carica della batteria"
+      }
+    },
+    "battery_dispatch_control_mode": {
+      "options": {
+        "charge": "Carica",
+        "discharge": "Scarica"
       }
     }
   }

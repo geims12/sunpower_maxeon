@@ -306,3 +306,29 @@ class AsyncConfigEntryAuth:
                 "Remote dispatch for %s accepted: HTTP %s - %s",
                 system_sn, resp.status, body,
             )
+
+    async def async_set_battery_dispatching(self, system_sn: str, payload: dict) -> None:
+        """Send a battery dispatching command (simple force charge/discharge)."""
+        token = await self.async_get_access_token()
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+        }
+        url = f"https://api.sunpowerglobal.com/v1/systems/{system_sn}/battery_dispatching"
+
+        _LOGGER.info("Submitting battery dispatch for %s: %s", system_sn, payload)
+
+        # Control action: let failures propagate so the caller can surface them
+        # instead of silently reporting success.
+        async with self._websession.post(url, headers=headers, json=payload) as resp:
+            body = await resp.text()
+            if resp.status >= 400:
+                _LOGGER.error(
+                    "Battery dispatch for %s rejected: HTTP %s - %s",
+                    system_sn, resp.status, body,
+                )
+            resp.raise_for_status()
+            _LOGGER.info(
+                "Battery dispatch for %s accepted: HTTP %s - %s",
+                system_sn, resp.status, body,
+            )

@@ -226,6 +226,36 @@
           "description": "Allow solar production to contribute during the dispatch window."
         }
       }
+    },
+    "battery_dispatch": {
+      "name": "Battery dispatch (simple charge/discharge)",
+      "description": "Force the battery to charge or discharge for a set duration using the simpler battery_dispatching endpoint. Try this if remote_dispatch is accepted but has no effect.",
+      "fields": {
+        "enable": {
+          "name": "Enable",
+          "description": "Turn the dispatch command on. Disable to cancel an in-progress dispatch."
+        },
+        "control_mode": {
+          "name": "Direction",
+          "description": "Whether to charge the battery (from grid/PV) or discharge it."
+        },
+        "duration_minutes": {
+          "name": "Duration (minutes)",
+          "description": "How long the dispatch command should run for."
+        },
+        "power": {
+          "name": "Power (W)",
+          "description": "Charge/discharge power in watts."
+        },
+        "target_soc": {
+          "name": "Target state of charge (%)",
+          "description": "Battery SOC at which charging/discharging stops."
+        },
+        "enable_pv": {
+          "name": "Allow PV",
+          "description": "Allow solar production to contribute during the dispatch window."
+        }
+      }
     }
   },
   "selector": {
@@ -237,6 +267,12 @@
         "optimise_consumption": "Optimise consumption",
         "maximise_consumption": "Maximise consumption",
         "no_battery_charge": "No battery charge"
+      }
+    },
+    "battery_dispatch_control_mode": {
+      "options": {
+        "charge": "Charge",
+        "discharge": "Discharge"
       }
     }
   }

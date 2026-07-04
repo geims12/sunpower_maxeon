@@ -52,3 +52,52 @@ remote_dispatch:
       default: false
       selector:
         boolean:
+
+battery_dispatch:
+  fields:
+    enable:
+      required: false
+      default: true
+      selector:
+        boolean:
+    control_mode:
+      required: true
+      selector:
+        select:
+          translation_key: battery_dispatch_control_mode
+          options:
+            - charge
+            - discharge
+    duration_minutes:
+      required: false
+      default: 10
+      selector:
+        number:
+          min: 2
+          max: 1440
+          step: 1
+          unit_of_measurement: min
+          mode: box
+    power:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 10000
+          step: 50
+          unit_of_measurement: W
+          mode: box
+    target_soc:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+          mode: box
+    enable_pv:
+      required: false
+      default: false
+      selector:
+        boolean:
