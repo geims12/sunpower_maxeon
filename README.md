@@ -86,6 +86,41 @@ No YAML configuration is necessary.
 
 ---
 
+## Services
+
+This integration exposes two services for controlling battery behavior:
+
+- `sunpower_maxeon.remote_dispatch` — set a temporary control mode (`pv_only_charge`, `forced_charge_discharge`, `load_following`, `optimise_consumption`, `maximise_consumption`, `no_battery_charge`), optionally with `power`, `target_soc`, `duration_minutes`, and `enable_pv`.
+- `sunpower_maxeon.battery_dispatch` — simple `charge`/`discharge` with required `power` and `target_soc`, plus `duration_minutes`.
+
+### Example: charge the battery during free power hours
+
+Contributed by [tristankin](https://github.com/geims12/sunpower_maxeon/issues/6#issuecomment-5029057045): an automation that fills the battery from the grid during a free-power window while still using solar, and stops exporting once the battery hits 100% SoC.
+
+```yaml
+alias: Free Power Battery charge
+description: >-
+  Use Input date time on front end and duration to set the free power charging
+  schedule.
+triggers:
+  - trigger: time
+    at: input_datetime.next_free_power_hours
+conditions: []
+actions:
+  - data:
+      control_mode: optimise_consumption
+      power: 5000
+      target_soc: 100
+      duration_minutes: "{{states('input_number.free_power_duration_minutes') | float}}"
+      enable_pv: true
+    action: sunpower_maxeon.remote_dispatch
+mode: single
+```
+
+This relies on an `input_datetime.next_free_power_hours` helper (set to the start of your free power window) and an `input_number.free_power_duration_minutes` helper (the window length in minutes) that you create yourself.
+
+---
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
